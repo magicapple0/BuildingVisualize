@@ -1,0 +1,31 @@
+name: BuildingVisualize
+version: '${project.version}'
+main: crystalcube.buildingvisualize.BuildingVisualize
+api-version: '1.20'
+load: STARTUP
+
+description: it's my VKR
+
+commands:
+  build:
+    description: simple
+    usage: type </build help> for help
+    permission-message: You don't have <permission>
+
+permissions.*:
+  build:
+    description: Gives access to all BuildingVisualize actions and commands
+    default: op
+    children:
+      build.help: true
+      build.reload: true
+      build.print: true
+  build.help:
+    description: Has permission to help command
+    default: op
+  build.reload:
+    description: Has permission to use the reload command
+    default: op
+  build.print:
+    description: Has permission to use the enable command
+    default: op
