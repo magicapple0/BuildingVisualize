@@ -6,12 +6,13 @@ import java.util.Objects;
 
 public final class BuildingVisualize extends JavaPlugin {
 
+    private final SelectorAxeManager selectorAxeManager = new SelectorAxeManager(this);
     private final MyConfig config = new MyConfig(this);
 
     @Override
     public void onEnable() {
         Objects.requireNonNull(this.getCommand("build")).setExecutor(new MyCommandExecutor(this));
-        var t = new JsonManager("src/main/resources/well.json");
+        getServer().getPluginManager().registerEvents(new OnAxeClickHandler(this), this);
     }
 
     @Override
@@ -20,4 +21,5 @@ public final class BuildingVisualize extends JavaPlugin {
     }
 
     public MyConfig getMyConfig(){ return config; }
+    public SelectorAxeManager getAxeManagerConfig(){ return selectorAxeManager; }
 }

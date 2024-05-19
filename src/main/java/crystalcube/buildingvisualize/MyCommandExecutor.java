@@ -1,6 +1,7 @@
 package crystalcube.buildingvisualize;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class MyCommandExecutor implements CommandExecutor, TabCompleter {
     private final BuildingVisualize plugin;
@@ -18,7 +20,9 @@ public class MyCommandExecutor implements CommandExecutor, TabCompleter {
     private final HashMap<String, String> commands = new HashMap<>(){{
         put("help", "Shows plugin commands");
         put("reload", "Reload plugin config");
-        put("print", "Change isEnable field");
+        put("print", "Test");
+        put("build", "Build a house");
+        put("getAxe", "Give axe to player");
     }};
 
     public MyCommandExecutor(BuildingVisualize plugin) {
@@ -57,6 +61,30 @@ public class MyCommandExecutor implements CommandExecutor, TabCompleter {
                 case "print":
                     config.setIsEnabled(!config.isEnabled());
                     sender.sendMessage("[BV]Switch is " + (config.isEnabled()?"enabled": "disabled"));
+                    return true;
+                case "getaxe":
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage("[BV]Only player can use this command");
+                        return true;
+                    }
+                    if (plugin.getAxeManagerConfig().give((Player) sender))
+                        sender.sendMessage("[BV]Get your axe");
+                    else
+                        sender.sendMessage("[BV]Your hand must be empty");
+                    return true;
+                case "build":
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage("[BV]Only player can use this command");
+                        return true;
+                    }
+                    var axe = ((Player)sender).getInventory().getItemInMainHand();
+                    if (axe.getItemMeta().getPersistentDataContainer()
+                        .has(plugin.getAxeManagerConfig().getIsSelectorAxeKey())){
+                        var jsonManager = new JsonManager(Objects.requireNonNull(plugin.getResource("well.json")));
+                        var corner = plugin.getAxeManagerConfig().GetLastLeftMouseClick(axe);
+                        Builder.Build(((Player)sender).getWorld(), jsonManager.TileSet, corner, sender);
+                    }
+                    sender.sendMessage("[BV]Build is built");
                     return true;
                 default:
                     sender.sendMessage(showHelp());

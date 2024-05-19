@@ -6,6 +6,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,6 +17,14 @@ public class JsonManager {
     public JsonManager(String path){
         try {
             TileSet = Parse(new String(Files.readAllBytes(Paths.get(path))));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public JsonManager(InputStream stream){
+        try {
+            TileSet = Parse(new String(stream.readAllBytes()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
