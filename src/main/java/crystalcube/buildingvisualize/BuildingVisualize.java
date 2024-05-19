@@ -12,8 +12,6 @@ public final class BuildingVisualize extends JavaPlugin {
     public void onEnable() {
         Objects.requireNonNull(this.getCommand("build")).setExecutor(new MyCommandExecutor(this));
         var t = new JsonManager("src/main/resources/well.json");
-        this.getLogger().info("1");
-        this.getLogger().info(t.content);
     }
 
     @Override

@@ -13,29 +13,9 @@ public class Tile {
 
     public Tile(JSONObject object){
         TileInfo = new TileInfo((JSONObject) object.get("TileInfo"));
-        var q = new ArrayList<String[]>();
-        for (var edge: (JSONArray)object.get("ModifiedEdges")) {
-            var qq = new ArrayList<String>();
-            for (var neighbor: (JSONArray)edge) {
-                qq.add(neighbor.toString());
-            }
-            q.add(qq.toArray(new String[0]));
-        }
-        ModifiedEdges = q.toArray(new String[0][0]);
-        if (object.get("ModifiedTextures") == null)
-            ModifiedTextures = null;
-        else{
-            var qq = new ArrayList<String>();
-            for (var tex: (JSONArray) object.get("ModifiedTextures")) {
-                qq.add(tex.toString());
-            }
-            ModifiedTextures = qq.toArray(new String[0]);
-        }
-
-        Modifiers = new ArrayList<>();
-        for (var tex: (JSONArray) object.get("Modifiers")) {
-            Modifiers.add(TileModifiers.fromInteger(Integer.parseInt(tex.toString())));
-        }
-
+        ModifiedEdges = JsonConverter.JSONArrayToString2DArray((JSONArray)object.get("ModifiedEdges"));
+        Modifiers = JsonConverter.JSONArrayToTileModifiersList((JSONArray) object.get("Modifiers"));
+        ModifiedTextures = object.get("ModifiedTextures") == null? null :
+                JsonConverter.JSONArrayToStringArray((JSONArray) object.get("ModifiedTextures"));
     }
 }
