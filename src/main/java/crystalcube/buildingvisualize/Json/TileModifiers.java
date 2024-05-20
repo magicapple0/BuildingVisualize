@@ -1,4 +1,4 @@
-package crystalcube.buildingvisualize;
+package crystalcube.buildingvisualize.Json;
 
 public enum TileModifiers {
     FlipX, FlipY, FlipZ, RotateX, RotateY, RotateZ, None;

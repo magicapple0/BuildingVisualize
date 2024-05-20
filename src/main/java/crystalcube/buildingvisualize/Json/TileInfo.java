@@ -1,5 +1,6 @@
-package crystalcube.buildingvisualize;
+package crystalcube.buildingvisualize.Json;
 
+import crystalcube.buildingvisualize.Json.JsonConverter;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 

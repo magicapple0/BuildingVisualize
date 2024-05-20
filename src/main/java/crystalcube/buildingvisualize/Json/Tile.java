@@ -1,4 +1,4 @@
-package crystalcube.buildingvisualize;
+package crystalcube.buildingvisualize.Json;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 
 public class Tile {
-    public TileInfo TileInfo;
+    public crystalcube.buildingvisualize.Json.TileInfo TileInfo;
     public String[][] ModifiedEdges;
     public String[] ModifiedTextures;
     public ArrayList<TileModifiers> Modifiers;

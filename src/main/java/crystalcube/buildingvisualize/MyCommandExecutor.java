@@ -1,5 +1,7 @@
 package crystalcube.buildingvisualize;
 
+import crystalcube.buildingvisualize.Builderr.Builder;
+import crystalcube.buildingvisualize.Json.JsonManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +23,8 @@ public class MyCommandExecutor implements CommandExecutor, TabCompleter {
         put("reload", "Reload plugin config");
         put("print", "Test");
         put("build", "Build a house");
-        put("getAxe", "Give axe to player");
+        put("getAxe", "Give selector to player");
+        put("save", "<name> Saves selected cube");
     }};
 
     public MyCommandExecutor(BuildingVisualize plugin) {
@@ -77,13 +80,36 @@ public class MyCommandExecutor implements CommandExecutor, TabCompleter {
                         return true;
                     }
                     if (plugin.getAxeManagerConfig().GetLastLeftMouseClick(((Player) sender).getUniqueId()) != null){
+                        if (args.length > 1) {
+                            var corner = plugin.getAxeManagerConfig().GetLastLeftMouseClick(((Player) sender).getUniqueId());
+                            Builder.BuildTileModel(((Player)sender).getWorld(), plugin.getModel(args[1]), corner);
+                            return true;
+                        }
                         var jsonManager = new JsonManager(Objects.requireNonNull(plugin.getResource("well.json")));
                         var corner = plugin.getAxeManagerConfig().GetLastLeftMouseClick(((Player) sender).getUniqueId());
-                        Builder.Build(((Player)sender).getWorld(), jsonManager.TileSet, corner, sender);
+                        Builder.Build(((Player)sender).getWorld(), jsonManager.TileSet, corner, sender, plugin);
                         sender.sendMessage("[BV]Build is built");
                         return true;
                     }
                     sender.sendMessage("[BV]Select first point");
+                    return true;
+                case "save":
+                    if (!(sender instanceof Player)){
+                        sender.sendMessage("[BV]Only player can use this command");
+                        return true;
+                    }
+                    if (args.length == 1){
+                        sender.sendMessage("[BV]Enter model name");
+                        return true;
+                    }
+                    if (plugin.getAxeManagerConfig().GetLastRightMouseClick(((Player) sender).getUniqueId()) == null ||
+                            plugin.getAxeManagerConfig().GetLastLeftMouseClick(((Player) sender).getUniqueId()) == null){
+                        sender.sendMessage("[BV] Select points");
+                        return true;
+                    }
+                    plugin.saveModel(args[1], plugin.getAxeManagerConfig().GetLastRightMouseClick(((Player) sender).getUniqueId()),
+                            plugin.getAxeManagerConfig().GetLastLeftMouseClick(((Player) sender).getUniqueId()));
+                    sender.sendMessage("[BV]" + args[1] + " saved");
                     return true;
                 default:
                     sender.sendMessage(showHelp());

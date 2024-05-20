@@ -1,5 +1,6 @@
-package crystalcube.buildingvisualize;
+package crystalcube.buildingvisualize.Axe;
 
+import crystalcube.buildingvisualize.BuildingVisualize;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

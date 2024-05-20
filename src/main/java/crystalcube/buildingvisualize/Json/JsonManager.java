@@ -1,5 +1,6 @@
-package crystalcube.buildingvisualize;
+package crystalcube.buildingvisualize.Json;
 
+import crystalcube.buildingvisualize.Vector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JsonManager {

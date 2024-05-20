@@ -1,4 +1,4 @@
-package crystalcube.buildingvisualize;
+package crystalcube.buildingvisualize.Json;
 
 import org.json.simple.JSONArray;
 

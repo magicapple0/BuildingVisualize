@@ -22,6 +22,7 @@ permissions.*:
       build.print: true
       build.build: true
       build.getAxe: true
+      build.save: true
   build.help:
     description: Has permission to help command
     default: op
@@ -35,5 +36,8 @@ permissions.*:
     description: Has permission to use the enable command
     default: op
   build.getAxe:
+    description: Has permission to use the enable command
+    default: op
+  build.save:
     description: Has permission to use the enable command
     default: op

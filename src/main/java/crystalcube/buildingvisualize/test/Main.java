@@ -1,8 +1,8 @@
 package crystalcube.buildingvisualize.test;
 
 
-import crystalcube.buildingvisualize.JsonManager;
-import crystalcube.buildingvisualize.Tile;
+import crystalcube.buildingvisualize.Json.JsonManager;
+import crystalcube.buildingvisualize.Json.Tile;
 import crystalcube.buildingvisualize.Vector;
 
 import java.util.HashMap;
