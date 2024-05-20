@@ -1,5 +1,6 @@
 package crystalcube.buildingvisualize;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -12,14 +13,12 @@ import java.util.UUID;
 import java.util.HashMap;
 
 public class SelectorAxeManager {
-    private final BuildingVisualize plugin;
     private final NamespacedKey isSelectorAxeKey;
-    private final HashMap<UUID, Vector> UUIDToLastLeftMouseClick = new HashMap<>();
-    private final HashMap<UUID, Vector> UUIDToLastRightMouseClick = new HashMap<>();
+    private final HashMap<UUID, Location> UUIDToLastLeftMouseClick = new HashMap<>();
+    private final HashMap<UUID, Location> UUIDToLastRightMouseClick = new HashMap<>();
 
 
     public SelectorAxeManager(BuildingVisualize plugin){
-        this.plugin = plugin;
         isSelectorAxeKey = new NamespacedKey(plugin, "isSelectorAxeKey");
 
     }
@@ -54,19 +53,19 @@ public class SelectorAxeManager {
         return false;
     }
 
-    public void SetLastRightClick(UUID playerId, Vector newVector){
-        UUIDToLastRightMouseClick.put(playerId, newVector);
+    public void SetLastRightClick(UUID playerId, Location newLocation){
+        UUIDToLastRightMouseClick.put(playerId, newLocation);
     }
 
-    public void SetLastLeftClick(UUID playerId, Vector newVector){
-        UUIDToLastLeftMouseClick.put(playerId, newVector);
+    public void SetLastLeftClick(UUID playerId, Location newLocation){
+        UUIDToLastLeftMouseClick.put(playerId, newLocation);
     }
 
-    public Vector GetLastLeftMouseClick(UUID playerId) {
+    public Location GetLastLeftMouseClick(UUID playerId) {
         return UUIDToLastLeftMouseClick.getOrDefault(playerId, null);
     }
 
-    public Vector GetLastRightMouseClick(UUID playerId) {
+    public Location GetLastRightMouseClick(UUID playerId) {
         return UUIDToLastRightMouseClick.getOrDefault(playerId, null);
     }
 }
