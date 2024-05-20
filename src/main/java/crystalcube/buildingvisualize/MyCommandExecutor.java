@@ -1,7 +1,6 @@
 package crystalcube.buildingvisualize;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -77,14 +76,14 @@ public class MyCommandExecutor implements CommandExecutor, TabCompleter {
                         sender.sendMessage("[BV]Only player can use this command");
                         return true;
                     }
-                    var axe = ((Player)sender).getInventory().getItemInMainHand();
-                    if (axe.getItemMeta().getPersistentDataContainer()
-                        .has(plugin.getAxeManagerConfig().getIsSelectorAxeKey())){
+                    if (plugin.getAxeManagerConfig().GetLastLeftMouseClick(((Player) sender).getUniqueId()) != null){
                         var jsonManager = new JsonManager(Objects.requireNonNull(plugin.getResource("well.json")));
-                        var corner = plugin.getAxeManagerConfig().GetLastLeftMouseClick(axe);
+                        var corner = plugin.getAxeManagerConfig().GetLastLeftMouseClick(((Player) sender).getUniqueId());
                         Builder.Build(((Player)sender).getWorld(), jsonManager.TileSet, corner, sender);
+                        sender.sendMessage("[BV]Build is built");
+                        return true;
                     }
-                    sender.sendMessage("[BV]Build is built");
+                    sender.sendMessage("[BV]Select first point");
                     return true;
                 default:
                     sender.sendMessage(showHelp());

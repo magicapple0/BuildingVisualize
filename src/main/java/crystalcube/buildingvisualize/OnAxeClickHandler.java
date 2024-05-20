@@ -17,35 +17,16 @@ public class OnAxeClickHandler implements Listener {
     @EventHandler
     public void OnClick(PlayerInteractEvent event) {
         var itemInMainHand = event.getPlayer().getInventory().getItemInMainHand();
-        var mainHandItemMeta = itemInMainHand.getItemMeta();
-        var isAxeInMainHand = mainHandItemMeta != null && mainHandItemMeta.getPersistentDataContainer()
-                .has(manager.getIsSelectorAxeKey());
-        if (isAxeInMainHand && event.getClickedBlock() != null) {
+        if (plugin.getAxeManagerConfig().IsItemStackAxe(itemInMainHand) && event.getClickedBlock() != null) {
+            var locationVector = new Vector(event.getClickedBlock().getLocation());
             if (event.getAction().isRightClick()){
-                OnRightClick(event);
+                manager.SetLastRightClick(event.getPlayer().getUniqueId(), locationVector);
+                event.getPlayer().sendActionBar("Second point: " + locationVector.ToString());
             }
             else {
-                OnLeftClick(event);
+                manager.SetLastLeftClick(event.getPlayer().getUniqueId(), locationVector);
+                event.getPlayer().sendActionBar("First point: " + locationVector.ToString());
             }
-
         }
-    }
-
-    private void OnRightClick(PlayerInteractEvent event){
-        var inventory = event.getPlayer().getInventory();
-        var locationVector = new Vector(Objects.requireNonNull(event.getClickedBlock()).getLocation());
-        var axe = inventory.getItemInMainHand();
-        manager.SetLastRightClick(axe, locationVector);
-        inventory.setItemInMainHand(axe);
-        event.getPlayer().sendActionBar("selected \"" + locationVector.ToString() + "\"");
-    }
-
-    private void OnLeftClick(PlayerInteractEvent event){
-        var inventory = event.getPlayer().getInventory();
-        var locationVector = new Vector(Objects.requireNonNull(event.getClickedBlock()).getLocation());
-        var axe = inventory.getItemInMainHand();
-        manager.SetLastLeftClick(axe, locationVector);
-        inventory.setItemInMainHand(axe);
-        event.getPlayer().sendActionBar("selected \"" + locationVector.ToString() + "\"");
     }
 }

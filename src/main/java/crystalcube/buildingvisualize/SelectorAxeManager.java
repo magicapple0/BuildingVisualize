@@ -7,19 +7,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import java.util.UUID;
+
+import java.util.HashMap;
 
 public class SelectorAxeManager {
     private final BuildingVisualize plugin;
     private final NamespacedKey isSelectorAxeKey;
-    private final NamespacedKey lastLeftMouseClick;
-    private final NamespacedKey lastRightMouseClick;
+    private final HashMap<UUID, Vector> UUIDToLastLeftMouseClick = new HashMap<>();
+    private final HashMap<UUID, Vector> UUIDToLastRightMouseClick = new HashMap<>();
 
 
     public SelectorAxeManager(BuildingVisualize plugin){
         this.plugin = plugin;
         isSelectorAxeKey = new NamespacedKey(plugin, "isSelectorAxeKey");
-        lastLeftMouseClick = new NamespacedKey(plugin, "lastLeftMouseClick");
-        lastRightMouseClick = new NamespacedKey(plugin, "lastRightMouseClick");
 
     }
 
@@ -29,23 +30,14 @@ public class SelectorAxeManager {
 
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
         pdc.set(isSelectorAxeKey, PersistentDataType.INTEGER, 1);
-        pdc.set(lastLeftMouseClick, PersistentDataType.INTEGER_ARRAY, new int[] {});
-        pdc.set(lastRightMouseClick, PersistentDataType.INTEGER_ARRAY, new int[] {});
 
         axe.setItemMeta(meta);
         return axe;
     }
 
-    public NamespacedKey getIsSelectorAxeKey() {
-        return isSelectorAxeKey;
-    }
-
-    public Vector getLastLeftMouseClick(ItemStack axe) {
-        var lastClick = axe.getItemMeta().getPersistentDataContainer().get(lastLeftMouseClick,PersistentDataType.INTEGER_ARRAY);
-        assert lastClick != null;
-        if (lastClick.length != 3)
-            return null;
-        return new Vector(lastClick[0], lastClick[1], lastClick[2]);
+    public Boolean IsItemStackAxe(ItemStack item){
+        return item.getItemMeta().getPersistentDataContainer()
+                .has(isSelectorAxeKey);
     }
 
     public boolean give(Player player){
@@ -62,33 +54,19 @@ public class SelectorAxeManager {
         return false;
     }
 
-    public void SetLastRightClick(ItemStack axe, Vector newVector){
-        var meta = axe.getItemMeta();
-        var pdc = meta.getPersistentDataContainer();
-        pdc.set(lastRightMouseClick, PersistentDataType.INTEGER_ARRAY, new int[]{newVector.X, newVector.Y, newVector.Z});
-        axe.setItemMeta(meta);
+    public void SetLastRightClick(UUID playerId, Vector newVector){
+        UUIDToLastRightMouseClick.put(playerId, newVector);
     }
 
-    public void SetLastLeftClick(ItemStack axe, Vector newVector){
-        var meta = axe.getItemMeta();
-        var pdc = meta.getPersistentDataContainer();
-        pdc.set(lastLeftMouseClick, PersistentDataType.INTEGER_ARRAY, new int[]{newVector.X, newVector.Y, newVector.Z});
-        axe.setItemMeta(meta);
+    public void SetLastLeftClick(UUID playerId, Vector newVector){
+        UUIDToLastLeftMouseClick.put(playerId, newVector);
     }
 
-    public Vector GetLastRightMouseClick(ItemStack axe) {
-        var lastClick = axe.getItemMeta().getPersistentDataContainer().get(lastRightMouseClick,PersistentDataType.INTEGER_ARRAY);
-        assert lastClick != null;
-        if (lastClick.length != 3)
-            return null;
-        return new Vector(lastClick[0], lastClick[1], lastClick[2]);
+    public Vector GetLastLeftMouseClick(UUID playerId) {
+        return UUIDToLastLeftMouseClick.getOrDefault(playerId, null);
     }
 
-    public Vector GetLastLeftMouseClick(ItemStack axe) {
-        var lastClick = axe.getItemMeta().getPersistentDataContainer().get(lastLeftMouseClick,PersistentDataType.INTEGER_ARRAY);
-        assert lastClick != null;
-        if (lastClick.length != 3)
-            return null;
-        return new Vector(lastClick[0], lastClick[1], lastClick[2]);
+    public Vector GetLastRightMouseClick(UUID playerId) {
+        return UUIDToLastRightMouseClick.getOrDefault(playerId, null);
     }
 }
